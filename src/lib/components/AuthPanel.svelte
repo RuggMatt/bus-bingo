@@ -84,9 +84,7 @@
 			<summary>Sign in to save your progress (optional)</summary>
 			{#if step === 'email'}
 				<form onsubmit={onSendEmail}>
-					<!-- Pico styles fieldset[role=group] as an input group -->
-					<!-- svelte-ignore a11y_no_redundant_roles -->
-					<fieldset role="group">
+					<div class="field-row">
 						<input
 							type="email"
 							bind:value={email}
@@ -95,7 +93,7 @@
 							required
 						/>
 						<button type="submit" disabled={busy}>Email me a code</button>
-					</fieldset>
+					</div>
 					<small>Buses you've already marked on this device will be saved to your account.</small>
 				</form>
 			{:else}
@@ -106,9 +104,7 @@
 							email.</small
 						>
 					</p>
-					<!-- Pico styles fieldset[role=group] as an input group -->
-					<!-- svelte-ignore a11y_no_redundant_roles -->
-					<fieldset role="group">
+					<div class="field-row">
 						<input
 							type="text"
 							bind:value={code}
@@ -118,7 +114,7 @@
 							required
 						/>
 						<button type="submit" disabled={busy}>Sign in</button>
-					</fieldset>
+					</div>
 					<button type="button" class="outline secondary" onclick={() => (step = 'email')}>
 						Use a different email
 					</button>
@@ -141,6 +137,21 @@
 	.auth button {
 		margin: 0;
 		padding: 0.25rem 0.75rem;
+	}
+	/* Input and button side by side on wide screens, stacked on phones. */
+	.field-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+		margin-bottom: var(--pico-spacing);
+	}
+	.field-row > * {
+		margin-bottom: 0;
+	}
+	@media (min-width: 576px) {
+		.field-row {
+			grid-template-columns: 1fr auto;
+		}
 	}
 	.error {
 		color: var(--pico-del-color);
