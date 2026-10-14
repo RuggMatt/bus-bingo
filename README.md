@@ -21,11 +21,22 @@ Signing in is optional and saves your progress to Supabase so it follows you acr
 1. Create a Supabase project.
 2. Apply the schema in `supabase/migrations/` (with the Supabase CLI: `supabase link` then
    `supabase db push`, or paste the SQL into the SQL editor).
-3. Under **Authentication → URL Configuration**, set the Site URL to where the app is deployed
-   and add `http://localhost:5173` for development.
-4. Under **Authentication → Emails → Magic Link**, include the one-time code in the template,
-   e.g. `<p>Your code: {{ .Token }}</p>`. The installed iOS app can't receive magic links
+3. Under **Authentication → URL Configuration**
+   (`https://supabase.com/dashboard/project/<ref>/auth/url-configuration`), set the **Site URL**
+   to where the app is deployed (e.g. `https://busbingo.example.com`) and add it plus
+   `http://localhost:5173/**` under **Redirect URLs**.
+4. Put the one-time code in the sign-in email. The installed iOS app can't receive magic links
    (they open in Safari), so users type the code instead.
+   - Supabase only lets you edit email templates once custom SMTP is set up: **Authentication →
+     Emails → SMTP Settings**, enable custom SMTP and enter your provider's details (Resend,
+     Postmark, Brevo, SES…). The built-in sender is also limited to a few emails an hour and
+     to your own team's addresses, so you need this for real users anyway.
+   - Then **Authentication → Emails → Templates → Magic Link**
+     (`https://supabase.com/dashboard/project/<ref>/auth/templates`) and add the code, e.g.
+     `<p>Your code: <strong>{{ .Token }}</strong></p>`. Keep the existing
+     `{{ .ConfirmationURL }}` link too. Do the same in the **Confirm signup** template, which is
+     what first-time users receive.
+   - Code length (6–10 digits) is set under **Authentication → Sign In / Providers → Email**.
 5. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 
 Without those variables the app runs local-only and the sign-in panel is hidden.
